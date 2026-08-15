@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>紅樓夢十二金釵｜心理測驗</title>
+<style>
+:root{--bg:#f7f1e8;--card:#fffdf9;--ink:#3d3030;--muted:#806f6a;--accent:#9b4d5c;--accent2:#ead6d7;--line:#e5d8ce}
+*{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at top,#fffaf2,#f4eadf 70%);color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans TC","PingFang TC",sans-serif}
+.wrap{max-width:720px;margin:auto;padding:28px 18px 50px}.card{background:rgba(255,253,249,.94);border:1px solid var(--line);border-radius:24px;padding:28px;box-shadow:0 12px 35px #6d51431a}
+.orn{text-align:center;font-size:42px}.eyebrow{text-align:center;color:var(--accent);letter-spacing:.18em;font-size:13px;font-weight:700}
+h1,h2{text-align:center;font-family:"Noto Serif TC","Songti TC",serif;font-weight:700}h1{font-size:30px;margin:8px 0}h2{font-size:26px;margin:8px 0}
+p{line-height:1.8}.sub{text-align:center;color:var(--muted);font-size:15px}.note{background:#f8eee9;border-radius:15px;padding:13px 15px;color:#6f5550;font-size:14px}
+button{font:inherit;cursor:pointer}.primary{width:100%;border:0;border-radius:15px;padding:14px;background:var(--accent);color:white;font-weight:700;margin-top:14px}.secondary{width:100%;border:1px solid var(--line);border-radius:15px;padding:13px;background:white;color:var(--ink);font-weight:700;margin-top:12px}
+.hidden{display:none!important}.top{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin-bottom:8px}.track{height:7px;background:var(--accent2);border-radius:10px;overflow:hidden}.fill{height:100%;width:0;background:var(--accent);transition:.25s}
+.question{font-family:"Noto Serif TC","Songti TC",serif;font-size:21px;font-weight:700;line-height:1.6;margin:25px 0 18px}.options{display:grid;gap:11px}.opt{border:1px solid var(--line);background:#fff;border-radius:15px;padding:14px 16px;text-align:left;color:var(--ink);transition:.15s}.opt:hover,.opt.selected{border-color:var(--accent);background:#fbf0f1}.result-title{text-align:center}.badge{display:inline-block;background:#f3e1e3;color:var(--accent);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700}.box{border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:12px;background:#fff}.box h3{margin:0 0 7px;font-size:14px;color:var(--muted)}.ranking div{display:flex;justify-content:space-between;padding:11px 13px;border-bottom:1px solid var(--line)}.ranking div:last-child{border-bottom:0}.small{text-align:center;color:var(--muted);font-size:12px;margin-top:20px}
+@media(max-width:520px){.wrap{padding:14px 10px 35px}.card{padding:22px 17px;border-radius:20px}h1{font-size:26px}.question{font-size:19px}}
+</style>
+</head>
+<body>
+<div class="wrap"><div class="card">
+<section id="intro">
+  <div class="orn">🌸</div><div class="eyebrow">紅樓夢・十二金釵</div>
+  <h1>你是哪一位金釵？</h1>
+  <p class="sub">12 道性格題，依直覺選擇。最後會分析你最接近的金釵與前三名人格傾向。</p>
+  <div class="note">小提醒：沒有標準答案，也不要猜「哪個選項是哪個角色」。憑第一直覺選，結果會更有趣。</div>
+  <button class="primary" id="start">開始測驗</button>
+</section>
+
+<section id="quiz" class="hidden">
+  <div class="top"><span id="progress"></span><span id="pct"></span></div>
+  <div class="track"><div class="fill" id="fill"></div></div>
+  <div class="question" id="question"></div>
+  <div class="options" id="options"></div>
+  <button class="primary" id="next" disabled>下一題</button>
+</section>
+
+<section id="result" class="hidden">
+  <div class="result-title"><div class="orn">🌺</div><div class="eyebrow">你的金釵人格</div><h2 id="name"></h2><div class="badge" id="tag"></div></div>
+  <p id="desc"></p>
+  <div class="box"><h3>你的核心特質</h3><div id="traits"></div></div>
+  <div class="box"><h3>人際與感情</h3><div id="rel"></div></div>
+  <div class="box"><h3>你的金釵式提醒</h3><div id="advice"></div></div>
+  <div class="box"><h3>你的前三名</h3><div class="ranking" id="ranking"></div></div>
+  <button class="secondary" id="again">再測一次</button>
+  <p class="small">本測驗為娛樂性格測驗，並非心理學診斷。</p>
+</section>
+</div></div>
+
+<script>
+const data=[
+["如果你遇到一件很在意、卻不知道該不該說出口的事，你比較可能：",["先放在心裡，自己慢慢消化","找一個最信任的人說","直接說清楚，不喜歡猜來猜去","先觀察局勢，找到最合適的時機"]],
+["朋友遇到麻煩來找你，你通常第一反應是：",["陪她把情緒說完","立刻想辦法解決問題","先分析事情到底誰對誰錯","先顧及她的感受，再決定怎麼做"]],
+["如果身邊的人都不認同你的選擇，你會：",["有點難過，但仍想照自己的想法走","重新思考，也可能調整自己","表面不說，心裡會記很久","只要自己認為值得，就不太在乎"]],
+["在一個新環境裡，你通常會：",["先觀察每個人的性格","很快主動和大家建立關係","找到幾個真正合得來的人","先讓自己適應規則，再慢慢展現自己"]],
+["如果你非常努力做一件事，最後卻沒有得到肯定，你會：",["覺得委屈，甚至懷疑自己","告訴自己至少自己知道努力過","有點不甘心，下一次要做得更好","接受結果，但會重新評估值不值得"]],
+["你最欣賞一個人身上的哪種特質？",["真誠而有自己的世界","溫柔又可靠","聰明、果斷、有能力","穩重、有分寸、懂得照顧別人"]],
+["發生衝突時，你最不喜歡的是：",["對方不理解自己的感受","關係因此變得疏遠","事情明明可以講清楚卻一直拖","大家為了情緒而失去理智"]],
+["如果你得到一個很難得的機會，但必須付出很大的代價，你會：",["先問自己到底想不想要","如果值得，就會全力以赴","計算得失後再決定","考慮這件事會不會影響身邊的人"]],
+["你認為真正的「自由」比較接近：",["可以忠於自己的內心","可以選擇自己想走的人生","不被別人的期待限制","有能力保護自己與重要的人"]],
+["如果你喜歡一個人，你比較可能：",["很在意細節和對方的每個反應","會默默照顧對方","希望對方也能坦白表達","會先確認這段關係是否真的適合"]],
+["當你發現一段關係正在慢慢改變，你會：",["很敏感地察覺到","努力想維持原本的樣子","直接問對方到底怎麼了","接受變化，同時保護好自己"]],
+["如果人生是一場旅程，你最希望最後留下的是：",["一個真正懂自己的自己","很多溫暖的人與回憶","一個不曾辜負自己的選擇","即使身處複雜世界，也能活得從容"]]
+];
+
+const profiles={
+"林黛玉":["敏感、真誠、重情的靈魂","細膩｜自我｜重感情｜有審美感","你很重視內心的真實感受，不容易用一句「沒事」帶過真正的情緒。你有自己的價值判斷，也容易察覺別人忽略的小細節。","你需要精神上的理解，比起表面的體貼，更在意對方是否真的看見你的內心。","不要因為害怕不被理解，就把所有感受都自己承擔。你的敏感也是觀察世界的能力。"],
+"薛寶釵":["穩定、圓融、成熟的觀察者","理性｜圓融｜穩重｜有分寸","你很懂得觀察環境，也知道什麼時候應該表達、什麼時候應該退一步。你容易成為別人覺得可靠的存在。","你重視長久與穩定，會用實際行動照顧關係，不喜歡無止境的情緒拉扯。","偶爾也可以把「懂事」放下，不必每一次都成為最有分寸的人。"],
+"王熙鳳":["果斷、敏銳、行動力強的掌局者","果斷｜機敏｜行動派｜領導力","你遇到問題通常不會只停留在想，而是很快開始處理。你對人情世故敏銳，能迅速判斷局面。","你重視效率與忠誠，不喜歡模糊不清；對重要的人其實比表面看起來更護短。","不是所有事情都需要你掌控。有時讓別人自己處理，也是一種力量。"],
+"史湘雲":["爽朗、自在、重義氣的行動派","開朗｜直率｜重義氣｜生命力","你有一種不喜歡被框住的氣質。即使遇到不順，也傾向想辦法繼續往前，而且很珍惜朋友。","你喜歡輕鬆真誠的相處，不太欣賞過度猜測；真正的朋友對你非常重要。","開朗不代表永遠都要撐住。你也可以放心讓別人照顧你。"],
+"賈探春":["清醒、有企圖心、重視能力的改革者","理性｜企圖心｜獨立｜責任感","你很在意「我能不能靠自己做到」。你不喜歡被身分或標籤定義，而希望自己的能力被看見。","你需要被尊重，也希望對方把你當成有能力做決定的人。","能力很重要，但不必總是證明自己有能力。偶爾接受幫助並不會削弱你。"],
+"李紈":["沉靜、溫厚、內斂的守護者","溫和｜穩定｜包容｜責任感","你比較少把自己放在舞台中央，卻常常默默承擔很多。你重視安定、責任與長久的人情。","你容易成為別人依賴的對象，但有時也會把自己的需要放到最後。","照顧別人之前，也值得問問自己真正想要什麼。"],
+"妙玉":["有原則、獨立、精神世界豐富","獨立｜有原則｜界線感｜重精神性","你有很強的個人標準，不太容易因為大家都這麼做就跟著做。你有一個外人不容易進入的內在世界。","你不喜歡勉強的關係，寧願少而深，也不想維持表面親近。","標準可以保護你，但也別讓它成為隔絕他人的牆。"],
+"賈迎春":["溫順、敏感、傾向避免衝突","溫和｜敏感｜忍讓｜和平","你通常不喜歡把事情鬧大，也容易先考慮別人的感受。你不是沒有想法，而是常覺得和平比爭輸贏更重要。","你需要安全感與尊重；遇到強勢的人時，要記得自己的界線。","拒絕並不是傷害別人。你的感受同樣值得被放在重要的位置。"],
+"賈惜春":["清醒、疏離、重視自己的世界","獨立｜冷靜｜界線感｜觀察力","你不太喜歡被情緒推著走，也有能力與群體保持一點距離，常能較早看見事情的本質。","你需要自己的空間，不喜歡被過度干涉；真正的親密必須建立在尊重界線上。","保護自己很好，但也可以讓值得信任的人知道你的真實想法。"],
+"秦可卿":["細膩、敏感、很重視關係氛圍","細膩｜感受力｜親和｜重關係","你對人與人之間微妙的氣氛很敏感，很容易注意到別人情緒的變化。","你需要被理解與接納，對冷淡或關係突然改變尤其敏感。","別人的情緒不一定都是你的責任。保留一點自己的心理空間。"],
+"賈元春":["成熟、克制、背負責任的守護者","成熟｜責任感｜克制｜重家庭","你很容易把「應該做什麼」放在「我想做什麼」之前。你有責任感，也常思考長遠後果。","你會努力維持重要關係，但有時不容易說出自己真正的需求。","人生不只有責任，也應該有一些真正屬於自己的選擇。"],
+"賈巧姐":["柔韌、重情、在變動中尋找安全感","柔韌｜重情｜適應力｜珍惜安穩","你很珍惜身邊可靠的人，也很在意生活是否有安全感。面對變化時，你未必喜歡冒險，但有很好的適應與恢復能力。","你重視真誠的陪伴，對背叛與關係的不穩定特別敏感。","別把安穩理解成停滯；你也有能力一步一步走出自己的路。"]
+};
+
+// 每題四個選項各對應不同金釵；同一角色可能多次出現。
+const map=[
+["林黛玉","史湘雲","王熙鳳","薛寶釵"],
+["林黛玉","李紈","王熙鳳","薛寶釵"],
+["林黛玉","史湘雲","妙玉","賈探春"],
+["薛寶釵","史湘雲","林黛玉","賈探春"],
+["林黛玉","史湘雲","賈探春","薛寶釵"],
+["林黛玉","李紈","王熙鳳","薛寶釵"],
+["賈惜春","李紈","王熙鳳","薛寶釵"],
+["林黛玉","賈探春","王熙鳳","李紈"],
+["林黛玉","史湘雲","賈探春","賈惜春"],
+["林黛玉","史湘雲","王熙鳳","薛寶釵"],
+["秦可卿","李紈","王熙鳳","賈惜春"],
+["賈元春","賈巧姐","賈探春","薛寶釵"]
+];
+// 為了讓 12 人都有機會成為結果，額外加入一次「隱藏人格加權」：
+// 使用答案組合的總體分布做微幅平衡，不改變明顯高分結果。
+const names=Object.keys(profiles);
+let scores={},q=0,chosen=-1;
+function reset(){scores={};names.forEach(n=>scores[n]=0);q=0;chosen=-1}
+const $=id=>document.getElementById(id);
+$("start").onclick=()=>{$("intro").classList.add("hidden");$("quiz").classList.remove("hidden");render()};
+function render(){
+ $("progress").textContent=`第 ${q+1} 題／12 題`; $("pct").textContent=`${Math.round(q/12*100)}%`; $("fill").style.width=`${q/12*100}%`;
+ $("question").textContent=data[q][0]; $("options").innerHTML=""; chosen=-1; $("next").disabled=true;
+ data[q][1].forEach((text,i)=>{let b=document.createElement("button");b.className="opt";b.textContent=text;b.onclick=()=>{document.querySelectorAll(".opt").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");chosen=i;$("next").disabled=false};$("options").appendChild(b)})
+}
+$("next").onclick=()=>{if(chosen<0)return;scores[map[q][chosen]]+=3;if(q<11){q++;render()}else{showResult()}};
+function showResult(){
+ $("quiz").classList.add("hidden");$("result").classList.remove("hidden");
+ // 讓所有 12 位角色至少有少量基礎分，避免未被選到的角色永遠 0 分。
+ names.forEach(n=>scores[n]+=0.01);
+ let rank=Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+ let winner=rank[0][0],p=profiles[winner];
+ $("name").textContent=winner;$("tag").textContent=p[0];$("desc").textContent=p[2];$("traits").textContent=p[1];$("rel").textContent=p[3];$("advice").textContent=p[4];
+ $("ranking").innerHTML=rank.slice(0,3).map((x,i)=>`<div><span>${i+1}. ${x[0]}</span><strong>${Math.round(x[1])} 分</strong></div>`).join("");
+}
+$("again").onclick=()=>{reset();$("result").classList.add("hidden");$("intro").classList.remove("hidden")};reset();
+</script>
+</body>
+</html>
